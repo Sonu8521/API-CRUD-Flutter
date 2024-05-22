@@ -1,25 +1,21 @@
-
-
-import 'package:api_crud_flutter/Comment_Api/Comment_provider.dart';
-import 'package:api_crud_flutter/Comment_Api/comment_datamodel.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'Albums_Provider.dart';
+import 'Albums_datamodel.dart';
 
-class JsonCommentView extends StatefulWidget {
+class JsonAlbumsview extends StatefulWidget {
   @override
-  _JsonCommentViewState createState() => _JsonCommentViewState();
+  _JsonAlbumsviewState createState() => _JsonAlbumsviewState();
 }
 
-class _JsonCommentViewState extends State<JsonCommentView> {
+class _JsonAlbumsviewState extends State<JsonAlbumsview> {
   final TextEditingController titleController = TextEditingController();
-  final TextEditingController bodyController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<CommentProvider>(context, listen: false).fetchPosts();
+      Provider.of<AlbumsProvider>(context, listen: false).fetchPosts();
     });
   }
 
@@ -27,16 +23,16 @@ class _JsonCommentViewState extends State<JsonCommentView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Json Comment APIs"),
+        title: const Text("Json Albums APIs"),
       ),
-      body: Consumer<CommentProvider>(
-        builder: (context, commentProvider, _) {
-          if (commentProvider.isLoading) {
-            return Center(child: CircularProgressIndicator());
+      body: Consumer<AlbumsProvider>(
+        builder: (context, albumsProvider, _) {
+          if (albumsProvider.isLoading) {
+            return const Center(child: CircularProgressIndicator());
           }
 
-          if (commentProvider.errorMessage != null) {
-            return Center(child: Text(commentProvider.errorMessage!));
+          if (albumsProvider.errorMessage != null) {
+            return Center(child: Text(albumsProvider.errorMessage!));
           }
 
           return Column(
@@ -47,49 +43,41 @@ class _JsonCommentViewState extends State<JsonCommentView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Create a new comment:',
+                      'Create a new Album:',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     TextField(
                       controller: titleController,
                       decoration: const InputDecoration(labelText: 'Title'),
                     ),
-                    TextField(
-                      controller: bodyController,
-                      decoration: const InputDecoration(labelText: 'Body'),
-                    ),
                     SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () async {
-                        final newComment = CommentDatamodel(
-                          postId: 1,
+                        final newAlbum = AlbumsDatamodel(
+                          userId: 1,
                           id: 0,
-                          name: titleController.text,
-                          email: 'email@example.com',
-                          body: bodyController.text,
+                          title: titleController.text,
                         );
-                        await commentProvider.createPost(newComment);
+                        await albumsProvider.createPost(newAlbum);
                         titleController.clear();
-                        bodyController.clear();
                       },
-                      child: Text('Add Comment'),
+                      child: Text('Add Album'),
                     ),
                   ],
                 ),
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: commentProvider.comments.length,
+                  itemCount: albumsProvider.albums.length,
                   itemBuilder: (context, index) {
-                    final comment = commentProvider.comments[index];
+                    final album = albumsProvider.albums[index];
                     return ListTile(
-                      title: Text(comment.name),
+                      title: Text('Title: ${album.title}'),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(comment.body),
-                          Text('ID: ${comment.id}'),
-                          Text('Post ID: ${comment.postId}'),
+                          Text('ID: ${album.id}'),
+                          Text('User ID: ${album.userId}'),
                         ],
                       ),
                       trailing: Row(
@@ -98,29 +86,24 @@ class _JsonCommentViewState extends State<JsonCommentView> {
                           IconButton(
                             icon: Icon(Icons.delete),
                             onPressed: () {
-                              commentProvider.deletePost(comment.id);
+                              albumsProvider.deletePost(album.id);
                             },
                           ),
                           IconButton(
                             icon: Icon(Icons.edit),
                             onPressed: () async {
-                              titleController.text = comment.name;
-                              bodyController.text = comment.body;
+                              titleController.text = album.title;
                               await showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: Text('Update Comment'),
+                                    title: Text('Update Album'),
                                     content: SingleChildScrollView(
                                       child: Column(
                                         children: [
                                           TextField(
                                             controller: titleController,
                                             decoration: const InputDecoration(labelText: 'Title'),
-                                          ),
-                                          TextField(
-                                            controller: bodyController,
-                                            decoration: const InputDecoration(labelText: 'Body'),
                                           ),
                                         ],
                                       ),
@@ -134,16 +117,13 @@ class _JsonCommentViewState extends State<JsonCommentView> {
                                       ),
                                       TextButton(
                                         onPressed: () async {
-                                          final updatedComment = CommentDatamodel(
-                                            postId: comment.postId,
-                                            id: comment.id,
-                                            name: titleController.text,
-                                            email: 'email@example.com',
-                                            body: bodyController.text,
+                                          final updatedAlbum = AlbumsDatamodel(
+                                            userId: album.userId,
+                                            id: album.id,
+                                            title: titleController.text,
                                           );
-                                          await commentProvider.updatePost(updatedComment);
+                                          await albumsProvider.updatePost(updatedAlbum);
                                           titleController.clear();
-                                          bodyController.clear();
                                           Navigator.pop(context);
                                         },
                                         child: Text('Update'),

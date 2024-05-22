@@ -1,21 +1,18 @@
-import 'package:api_crud_flutter/Comment_Api/Comment_view.dart';
-import 'package:api_crud_flutter/Controller/UserProvider.dart';
-import 'package:api_crud_flutter/JsonApi/postApi.dart';
-import 'package:api_crud_flutter/JsonApi/post_provider.dart';
+import 'package:api_crud_flutter/Albums_Api/Albums_Provider.dart';
+import 'package:api_crud_flutter/Comment_Api/Comment_provider.dart';
 import 'package:api_crud_flutter/screen/Hoem_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:api_crud_flutter/Comment_Api/Comment_provider.dart';
+import 'Controller/UserProvider.dart';
+import 'JsonApi/postApi.dart';
+import 'JsonApi/post_provider.dart';
 
 void main() {
-
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +22,18 @@ class MyApp extends StatelessWidget {
           create: (context) => UserProvider(),
         ),
         ChangeNotifierProvider<PostProvider>(
-          create: (context) => PostProvider(),// Fetch posts once here
+          create: (context) => PostProvider(),
         ),
-        ChangeNotifierProvider<CommentProvider>(create: (context)=> CommentProvider()),
+
+        ChangeNotifierProvider<CommentProvider>(
+          create: (context) => CommentProvider(),
+        ),
+
+        ChangeNotifierProvider<AlbumsProvider>(
+          create: (context) => AlbumsProvider(),
+        ),
       ],
-      child:  MaterialApp(
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: HoemPage(),
       ),
