@@ -2,6 +2,7 @@ import 'package:api_crud_flutter/Comment_Api/Comment_view.dart';
 import 'package:api_crud_flutter/Controller/UserProvider.dart';
 import 'package:api_crud_flutter/JsonApi/postApi.dart';
 import 'package:api_crud_flutter/JsonApi/post_provider.dart';
+import 'package:api_crud_flutter/screen/Hoem_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,9 +29,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<CommentProvider>(create: (context)=> CommentProvider()),
       ],
-      child: MaterialApp(
+      child:  MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: JsonPostApis(),
+        home: HoemPage(),
       ),
     );
   }
