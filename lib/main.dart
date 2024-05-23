@@ -1,5 +1,7 @@
 import 'package:api_crud_flutter/Albums_Api/Albums_Provider.dart';
 import 'package:api_crud_flutter/Comment_Api/Comment_provider.dart';
+import 'package:api_crud_flutter/Photos_Api/Photo_Provider.dart';
+import 'package:api_crud_flutter/Todos_Api/Todos_Provider.dart';
 import 'package:api_crud_flutter/screen/Hoem_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,10 +34,18 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<AlbumsProvider>(
           create: (context) => AlbumsProvider(),
         ),
+
+        ChangeNotifierProvider<PhotoProvider>(
+          create: (context) => PhotoProvider(),
+        ),
+
+        ChangeNotifierProvider<TodosProvider>(
+          create: (context) => TodosProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: HoemPage(),
+        home: HomePage(),
       ),
     );
   }
